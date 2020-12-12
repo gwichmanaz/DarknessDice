@@ -1,0 +1,9 @@
+{
+	"name": "DarknessDice",
+	"description": "World Darkness Dice Roller",
+	"repository": "https://github.com/gwichmanaz/DarknessDice",
+	"version": "1.0.0",
+	"engines": {
+		"node": "12.x"
+	}
+}
