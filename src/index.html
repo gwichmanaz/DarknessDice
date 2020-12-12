@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+		<title>WWF Game Event | Webview</title>
+		<link rel="stylesheet" type="text/css" href="css/wodice.css" inline/>
+		<script type="module">
+			import { WoDiceRoller } from "./js/index.js";
+			window.addEventListener('load', () => {
+				window.WoDiceRoller = new WoDiceRoller();
+			});
+		</script>
+	</head>
+	<body>
+		<div class="inputs">
+			<div id="difficulty">
+				<div class="prompt">difficulty</div>
+				<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
+			</div><div id="dicePool">
+				<div class="prompt">dice pool</div>
+				<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
+			</div><div id="bestialPool">
+				<div class="prompt">bestial dice</div>
+				<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
+			</div><div id="roll">roll</div>
+		</div>
+		<div class="display">
+		</div>
+		<div class="outputs">
+			<div id="rollOutput"></div>
+			<div id="messyCritical"></div>
+		</div>
+	</body>
+</html>
+
+

@@ -1,0 +1,106 @@
+* {
+	font-family: "Helvetica Neue",helvetica,sans-serif;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 20px;
+	box-sizing: border-box;
+	user-select: none;
+}
+
+body {
+	margin: 0;
+}
+
+body > div {
+	border: 2px solid black;
+	padding: 5px;
+}
+
+div.d10 {
+	display: inline-block;
+}
+
+div.d10.bestial .face {
+	background-color: red;
+	color: white;
+}
+
+div.d10.success > .face {
+	border-color: skyblue;
+}
+
+div.d10.fail > .face {
+	border-color:pink;
+}
+
+div.d10.critical > .face {
+	border-color: limegreen;
+}
+
+div.d10 div {
+	font-size: 40px;
+	line-height: 45px;
+	transform: scale(0.95);
+	transform-origin: bottom left;
+}
+
+div.prompt {
+	width: 70%;
+}
+
+div.input > div {
+	padding:5px;
+	text-align: center;
+	font-size: 25px;
+}
+div.input > div.value {
+	min-width: 40px;
+}
+
+div.input > div.minus,
+div.input > div.plus,
+#roll
+{
+	cursor: pointer;
+}
+
+#roll {
+	background-color: green;
+	color: white;
+	text-align: center;
+	padding: 6px;
+	border-radius: 10px;
+}
+
+div.face {
+	text-align: center;
+	border: 5px solid black;
+	border-radius: 10px;
+	height: 55px;
+	width: 55px;
+}
+
+div.display > div.d10 {
+	margin: 5px;
+}
+
+div.inputs > div > div,
+div.inputs > div > div > div {
+	display: inline-block;
+}
+
+div.display div {
+	display: inline-block;
+}
+
+div.inputs,
+div.outputs {
+	width: 30%;
+}
+
+div.display {
+	position: absolute;
+	width: 70%;
+	right: 0;
+	top: 0;
+}
