@@ -1,14 +1,10 @@
 export class InputView {
 	constructor(vm) {
-		this.messyCriticalEl= document.querySelector("#messyCritical");
-		this.rollOutputEl= document.querySelector("#rollOutput");
 		this.difficultyEl = document.querySelector("#difficulty");
 		this.dicePoolEl = document.querySelector("#dicePool");
 		this.bestialPoolEl = document.querySelector("#bestialPool");
 		this.rollEl = document.querySelector("#roll");
 		["difficulty", "dicePool", "bestialPool"].forEach(key => this.bindNumericKey(vm, key));
-		vm.bind("messyCritical", this.messyCriticalEl);
-		vm.bind("rollOutput", this.rollOutputEl);
 		this.rollEl.addEventListener('click', () => vm.roll++);
 	}
 	bindNumericKey(vm, key) {

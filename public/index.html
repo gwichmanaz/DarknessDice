@@ -7,10 +7,64 @@
 		<link rel="stylesheet" type="text/css" href="css/wodice.css" inline/>
 		<script type="module">
 			import { WoDiceRoller } from "./js/index.js";
+			function onResize() {
+				document.body.className = (window.innerHeight > window.innerWidth) ?
+					"portrait" : "landscape";
+			}
 			window.addEventListener('load', () => {
 				window.WoDiceRoller = new WoDiceRoller();
+				onResize();
 			});
+			window.addEventListener('resize', onResize);
 		</script>
+		<style id="colorstyles">
+			div.d10.normal .face {
+				background-color: #FFFFFF;
+				color: #000000;
+			}
+
+			div.d10.bestial .face {
+				background-color: #EE2200;
+				color: #FFFFFF;
+			}
+
+			div.d10.success > .face {
+				border-color: #87CECB;
+			}
+
+			div.d10.fail > .face {
+				border-color: #FFC0CB;
+			}
+
+			div.d10.critical > .face {
+				border-color: #31CD32;
+			}
+
+			div.success div.result {
+				background-color: #87CECB;
+				color: #000000;
+			}
+
+			div.fail div.result {
+				background-color: #FFFFFF;
+				color: #000000;
+			}
+
+			div.fail.botch div.result {
+				background-color: #FFC0CB;
+				color: #000000;
+			}
+
+			div.fail.botch.bestialFailure div.result {
+				background-color: #EE2200;
+				color: #FFFFFF;
+			}
+
+			div.messyCritical div.extra {
+				background-color: #31CD32;
+				color: #AA0000;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="inputs">
@@ -24,14 +78,21 @@
 				<div class="prompt">bestial dice</div>
 				<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
 			</div><div id="roll">roll</div>
-		</div>
-		<div class="display">
-		</div>
-		<div class="outputs">
-			<div id="rollOutput"></div>
-			<div id="messyCritical"></div>
+		</div><div class="display">
+		</div><div class="outputs">
+			<div class="smaller">
+				<span class="fail"><span class="successCount">0</span> successes</span>
+			</div>
+			<div class="result">
+				<span class="success"><span class="successCount">0</span> successes</span>
+				<span class="fail">fail</span>
+				<span class="rolling">(rolling)</span>
+				<span class="botch">botch</span>
+				<span class="bestialFailure">bestial failure</span>
+			</div>
+			<div class="extra">
+				<span class="messyCritical">Messy Critical</span>
+			</div>
 		</div>
 	</body>
 </html>
-
-
