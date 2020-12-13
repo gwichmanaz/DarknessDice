@@ -1,38 +1,51 @@
 import { d10 } from "./d10.js";
 import { ViewModel } from "./ViewModel.js";
+import { PersistentViewModel } from "./PersistentViewModel.js";
 import { InputView } from "./InputView.js";
+import { OutputView } from "./OutputView.js";
 
 export class WoDiceRoller {
 	constructor() {
-		this.vm = new ViewModel(["difficulty", "dicePool", "bestialPool", "rollOutput", "messyCritical", "roll"]);
-		this.view = new InputView(this.vm);
+		this.pvm = new PersistentViewModel("inputs", {
+			"difficulty": 6,
+			"dicePool": 4,
+			"bestialPool": 1,
+			"roll": 0,
+		});
+		this.vm = new ViewModel([
+			"rolling",
+			"successCount",
+			"success",
+			"fail",
+			"botch",
+			"bestialFailure",
+			"messyCritical"
+		]);
+		new InputView(this.pvm);
+		new OutputView(this.vm);
 		this.normalPool = [];
 		this.bestialPool = [];
-		["difficulty", "dicePool", "bestialPool"].forEach(key => this.vm.bind(key, null, this.constrain.bind(this)));
-		this.vm.difficulty = 6;
-		this.vm.dicePool = 1;
-		this.vm.bestialPool = 0;
-		this.vm.roll = 0;
-		this.vm.bind("roll", null, this.roll.bind(this));
+		["difficulty", "dicePool", "bestialPool"].forEach(key => this.pvm.bind(key, null, this.constrain.bind(this)));
+		this.pvm.bind("roll", null, this.roll.bind(this));
 	}
 	constrain() {
-		if (this.vm.dicePool < 1) {
-			this.vm.dicePool = 1;
+		if (this.pvm.dicePool < 1) {
+			this.pvm.dicePool = 1;
 		}
-		if (this.vm.dicePool > 20) {
-			this.vm.dicePool = 20;
+		if (this.pvm.dicePool > 20) {
+			this.pvm.dicePool = 20;
 		}
-		if (this.vm.difficulty < 2) {
-			this.vm.difficulty = 2;
+		if (this.pvm.difficulty < 2) {
+			this.pvm.difficulty = 2;
 		}
-		if (this.vm.difficulty > 10) {
-			this.vm.difficulty = 10;
+		if (this.pvm.difficulty > 10) {
+			this.pvm.difficulty = 10;
 		}
-		if (this.vm.bestialPool < 0) {
-			this.vm.bestialPool = 0;
+		if (this.pvm.bestialPool < 0) {
+			this.pvm.bestialPool = 0;
 		}
-		if (this.vm.bestialPool > this.vm.dicePool) {
-			this.vm.bestialPool = this.vm.dicePool;
+		if (this.pvm.bestialPool > this.pvm.dicePool) {
+			this.pvm.bestialPool = this.pvm.dicePool;
 		}
 		this.updatePools();
 	}
@@ -45,25 +58,31 @@ export class WoDiceRoller {
 		}
 	}
 	updatePools() {
-		let normalSize = this.vm.dicePool - this.vm.bestialPool;
-		let beastSize = this.vm.bestialPool;
+		let normalSize = this.pvm.dicePool - this.pvm.bestialPool;
+		let beastSize = this.pvm.bestialPool;
 		this.updatePool(this.normalPool, "normal", normalSize);
 		this.updatePool(this.bestialPool, "bestial", beastSize);
 	}
 	roll(el, value) {
-		if (value == 0 || this.rolling) {
+		if (value == 0 || this.vm.rolling) {
 			return;
 		}
-		this.rolling = true;
-		console.log("ROLLING");
-		this.vm.rollOutput = "(rolling)";
-		this.vm.messyCritical = "";
-		let threshold = this.vm.difficulty;
+
+		this.vm.success = false;
+		this.vm.fail = false;
+		this.vm.botch = false;
+		this.vm.bestialFailure = false;
+		this.vm.messyCritical = false;
+		this.vm.rolling = true;
+
+		let threshold = this.pvm.difficulty;
 		this.updatePools();
 		let rollPromises = [].concat(this.normalPool.map(d => d.roll(threshold)), this.bestialPool.map(d => d.roll(threshold)));
 		Promise.all(rollPromises).then(() => {
 			this.analyze();
-			this.rolling = false;
+			this.vm.rolling = false;
+			this.pvm.roll = 0;
+			this.pvm.persist();
 		});
 	}
 	analyze() {
@@ -78,37 +97,29 @@ export class WoDiceRoller {
 		console.log("normalAnalysis", d);
 		console.log("beastAnalysis", b);
 
-		let success, isFail = false, isBotch = false, isBestialFailure = false, isMessyCritical = false;
-
-		success = d.successes + b.successes + d.failures + b.failures;
-		if (success > 0) {
+		this.vm.successCount = d.successes + b.successes + d.failures + b.failures;
+		if (this.vm.successCount > 0) {
+			this.vm.success = true;
 			// It's a success ... is it a messy critical?
 			if (b.criticals >= 1 && b.criticals + d.criticals >= 2) {
-				isMessyCritical = true;
+				this.vm.messyCritical = true;
 			}
 		} else {
 			// If we got here, it's a failure.  But what kind of failure?
-			isFail = true;
+			this.vm.fail = true;
 			if (d.successes == 0 && b.successes == 0) {
 				if (b.failures < 0) {
-					isBestialFailure = true;
+					this.vm.bestialFailure = true;
 				}
 				if (d.failures < 0) {
-					isBotch = true;
+					this.vm.botch = true;
 				}
 			}
 		}
-		//update vm accordingly...
-		this.vm.messyCritical = isMessyCritical ? "Messy Critical" : "";
-		this.vm.rollOutput = isBestialFailure ? "Bestial Failure" :
-			isBotch ? "Botch" :
-			isFail ? "Fail" :
-			success > 1 ? `${success} Successes` :
-				"1 Success"
 	}
 	analyzeSet(numbers) {
 		let failures = 0, successes = 0, criticals = 0;
-		let difficulty = this.vm.difficulty;
+		let difficulty = this.pvm.difficulty;
 		numbers.forEach(n => {
 			if (n == 1) {
 				failures--;

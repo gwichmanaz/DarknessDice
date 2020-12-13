@@ -20,23 +20,6 @@ div.d10 {
 	display: inline-block;
 }
 
-div.d10.bestial .face {
-	background-color: red;
-	color: white;
-}
-
-div.d10.success > .face {
-	border-color: skyblue;
-}
-
-div.d10.fail > .face {
-	border-color:pink;
-}
-
-div.d10.critical > .face {
-	border-color: limegreen;
-}
-
 div.d10 div {
 	font-size: 40px;
 	line-height: 45px;
@@ -94,13 +77,53 @@ div.display div {
 }
 
 div.inputs,
+div.display,
 div.outputs {
-	width: 30%;
+	float: left;
+	width: 100vw;
+	min-height: 180px;
 }
 
-div.display {
-	position: absolute;
-	width: 70%;
-	right: 0;
-	top: 0;
+.landscape div.inputs {
+	width: 30vw;
+}
+
+.landscape div.display {
+	width: 70vw;
+}
+
+div.outputs {
+	min-height: 100px;
+}
+
+div.outputs > div {
+	width: 100%;
+	text-align: center;
+}
+
+div.outputs span {
+	font-size: 50px;
+}
+
+div.outputs .smaller span {
+	font-size: 20px;
+}
+
+div.outputs > div > span {
+	display: none;
+}
+
+div.outputs.messyCritical > div > span.messyCritical,
+div.outputs.bestialFailure > div > span.bestialFailure,
+div.outputs.botch > div > span.botch,
+div.outputs.success > div > span.success,
+div.outputs.fail > div > span.fail,
+div.outputs.rolling > div > span.rolling {
+	display: inline;
+}
+
+div.outputs.bestialFailure > div.result > span.botch,
+div.outputs.bestialFailure > div.result > span.fail,
+div.outputs.botch > div.result > span.fail {
+	display: none;
 }
