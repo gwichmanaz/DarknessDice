@@ -1,13 +1,14 @@
 var salt = 0;
 
 var saltSeed = () => {
-	return Date.now() + ++salt;
+	salt += 1000 * 60 * 60 * 24;
+	return Date.now() - salt;
 }
 
 export class RNG {
 	constructor(seed) {
 		seed = seed || saltSeed();
-		this.seed = Math.floor(Math.abs(seed));
+		this.seed = Math.floor(Math.abs(seed)) % 2147483647;
 		this.uses = 0;
 	}
 	next() {
