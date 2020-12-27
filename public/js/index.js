@@ -70,6 +70,10 @@ export class WoDiceRoller {
 			return;
 		}
 
+		// Re-seed with current moment so when you click matters,
+		// even though it's all random anyway.
+		this.rng.reset();
+
 		this.vm.success = false;
 		this.vm.fail = false;
 		this.vm.botch = false;

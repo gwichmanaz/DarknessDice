@@ -31,6 +31,28 @@ div.prompt {
 	width: 70%;
 }
 
+div.input {
+	position: relative;
+}
+
+div.input div.secret {
+	border: 1px solid red;
+	width: 80px;
+	text-align: center;
+	color: red;
+	transform: rotate(-10deg);
+	position: absolute;
+	left: 0;
+	top: 5px;
+	font-size: 17px;
+	background-color: white;
+	display: none;
+}
+
+.secret div.input div.secret {
+	display: block;
+}
+
 div.input > div {
 	padding:5px;
 	text-align: center;
