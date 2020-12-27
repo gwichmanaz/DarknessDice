@@ -1,3 +1,4 @@
+import { RNG } from "./RNG.js";
 import { d10 } from "./d10.js";
 import { ViewModel } from "./ViewModel.js";
 import { PersistentViewModel } from "./PersistentViewModel.js";
@@ -6,6 +7,7 @@ import { OutputView } from "./OutputView.js";
 
 export class WoDiceRoller {
 	constructor() {
+		this.rng = new RNG();
 		this.pvm = new PersistentViewModel("inputs", {
 			"difficulty": 6,
 			"dicePool": 4,
@@ -51,7 +53,7 @@ export class WoDiceRoller {
 	}
 	updatePool(pool, color, size) {
 		while(pool.length < size) {
-			pool.push(new d10(color));
+			pool.push(new d10(color, this.rng));
 		}
 		while(pool.length > size) {
 			pool.pop().destruct();
