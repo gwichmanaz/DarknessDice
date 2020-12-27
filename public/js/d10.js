@@ -1,6 +1,7 @@
 import { ViewModel } from "./ViewModel.js";
 import { d10View } from "./d10View.js";
 import { Utils } from "./Utils.js";
+import { RNG } from "./RNG.js";
 
 const MIN_SPIN_MS = 500, MAX_SPIN_MS = 1500;
 const SPINTERVAL_MS = 30;
@@ -8,7 +9,8 @@ const MIN_PIPS = 1, MAX_PIPS = 10;
 const SPAWN_PIPS = MAX_PIPS;
 
 export class d10 {
-	constructor(color, parent = null) {
+	constructor(color, parent = null, rng = null) {
+		this.rng = rng || new RNG();
 		this.generation = parent ? parent.generation + 1 : 0;
 		this.vm = new ViewModel(["color", "spinning", "face", "success", "fail", "critical"]);
 		this.view = new d10View(this.vm, parent && parent.view);
@@ -33,7 +35,7 @@ export class d10 {
 		this.vm.fail = false;
 		this.vm.critical = false;
 		this._doSpin(true);
-		return Utils.wait(Utils.randRange(MIN_SPIN_MS, MAX_SPIN_MS)).then(() => {
+		return Utils.wait(this.rng.minmax(MIN_SPIN_MS, MAX_SPIN_MS)).then(() => {
 			this._doSpin(false);
 			this.vm.success = this.vm.face >= threshold;
 			this.vm.fail = this.vm.face == 1 && this.generation == 0;
@@ -47,10 +49,10 @@ export class d10 {
 		});
 	}
 	setFace() {
-		this.vm.face = Utils.randRange(MIN_PIPS, MAX_PIPS);
+		this.vm.face = this.rng.minmax(MIN_PIPS, MAX_PIPS);
 	}
 	spawn() {
-		let newSpawn = new d10(this.vm.color, this);
+		let newSpawn = new d10(this.vm.color, this, this.rng);
 		this.spawns.push(newSpawn);
 		return newSpawn;
 	}
