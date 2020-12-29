@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title>World of Darkness Dice Roller</title>
 		<link rel="stylesheet" type="text/css" href="css/wodice.css" inline/>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 		<script type="module">
 			import { WoDiceRoller } from "./js/index.js";
 			function onResize() {
@@ -94,6 +95,10 @@
 			<div class="extra">
 				<span class="messyCritical">Messy Critical</span>
 			</div>
+		</div><div class="connections">
+			<div id="gamename"><div class="prompt">Game Name</div><input type="text"/></div>
+			<div id="username"><div class="prompt">User Name</div><input type="text"/></div>
+			<div id="join">join</div>
 		</div>
 	</body>
 </html>
