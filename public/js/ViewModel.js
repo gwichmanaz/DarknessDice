@@ -17,7 +17,7 @@ export class ViewModel extends EventBus {
 		this._vmObject = {};
 		keys && this.addKeys(keys);
 	}
-	static bindCss(element, value) {
+	static bindCss (element, value) {
 		element.className = value;
 	}
 	addKeys (key) {
@@ -39,5 +39,8 @@ export class ViewModel extends EventBus {
 		this.on("UPDATE_BINDING-" + key, (value) => {
 			updateFunc(element, value);
 		});
+	}
+	getKeys () {
+		return Object.keys(this._vmObject);
 	}
 };

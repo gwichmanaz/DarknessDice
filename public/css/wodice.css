@@ -27,7 +27,7 @@ div.d10 div {
 	transform-origin: bottom left;
 }
 
-div.prompt {
+div.inputs div.prompt {
 	width: 70%;
 }
 
@@ -64,11 +64,14 @@ div.input > div.value {
 
 div.input > div.minus,
 div.input > div.plus,
-#roll
+#roll,
+#connect,
+#disconnect
 {
 	cursor: pointer;
 }
 
+#connect,
 #roll {
 	background-color: green;
 	color: white;
@@ -90,12 +93,27 @@ div.display > div.d10 {
 }
 
 div.inputs > div > div,
-div.inputs > div > div > div {
+div.inputs > div > div > div,
+div.display div,
+div.connections div {
 	display: inline-block;
 }
 
-div.display div {
-	display: inline-block;
+div.connections > div {
+	padding: 3px;
+}
+
+div.connections div {
+	white-space: nowrap;
+}
+
+div.connections div.prompt {
+	padding-left: 1em;
+	padding-right: 0.25em;
+}
+
+div.connections input {
+	width: 100px;
 }
 
 div.inputs,
@@ -148,4 +166,18 @@ div.outputs.bestialFailure > div.result > span.botch,
 div.outputs.bestialFailure > div.result > span.fail,
 div.outputs.botch > div.result > span.fail {
 	display: none;
+}
+
+#connect,
+#connecting,
+#disconnect {
+	display: none;
+	margin-left: 2em;
+	padding: 0 1em;
+}
+
+.disconnected #connect,
+.connecting #connecting,
+.connected #disconnect {
+	display: inline-block;
 }

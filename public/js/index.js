@@ -1,5 +1,7 @@
+/*global io */
 import { RNG } from "./RNG.js";
 import { d10 } from "./d10.js";
+import { Connector } from "./Connector.js";
 import { ViewModel } from "./ViewModel.js";
 import { PersistentViewModel } from "./PersistentViewModel.js";
 import { InputView } from "./InputView.js";
@@ -23,6 +25,7 @@ export class WoDiceRoller {
 			"bestialFailure",
 			"messyCritical"
 		]);
+		this.connector = new Connector(io());
 		new InputView(this.pvm);
 		new OutputView(this.vm);
 		this.normalPool = [];
