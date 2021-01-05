@@ -26,13 +26,20 @@ export class d10 {
 		this.vm.critical = false;
 		this.vm.face = 0;
 	}
-	_doSpin(numSpins) {
+	_doSpin(numSpins, fast = false) {
 		clearInterval(this.interval);
+		if (fast) {
+			while(numSpins--) {
+				this.setFace();
+			}
+			return Promise.resolve();
+		}
 		this.vm.spinning = true;
 		return new Promise((resolve, reject) => {
 			this.interval = setInterval(() => {
 				this.setFace();
-				if (numSpins-- <= 0) {
+				numSpins--;
+				if (numSpins <= 0) {
 					clearInterval(this.interval);
 					this.vm.spinning = false;
 					resolve();
@@ -40,17 +47,17 @@ export class d10 {
 			}, SPINTERVAL_MS);
 		});
 	}
-	roll(threshold) {
+	roll(threshold, fast = false) {
 		this.despawn();
 		this.vm.success = false;
 		this.vm.fail = false;
 		this.vm.critical = false;
-		return this._doSpin(this.rng.minmax(MIN_SPINS, MAX_SPINS)).then(() => {
+		return this._doSpin(this.rng.minmax(MIN_SPINS, MAX_SPINS), fast).then(() => {
 			this.vm.success = this.vm.face >= threshold;
 			this.vm.fail = this.vm.face == 1 && this.generation == 0;
 			this.vm.critical = this.vm.face >= SPAWN_PIPS;
 			if (this.vm.face >= SPAWN_PIPS) {
-				return this.spawn().roll(threshold).then(() => {
+				return this.spawn().roll(threshold, fast).then(() => {
 					return this.values();
 				});
 			}
