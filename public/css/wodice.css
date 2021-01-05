@@ -30,14 +30,24 @@ body {
 	padding: 5px;
 }
 
+.players * {
+	font-size: 14px;
+}
+
 .players > div {
 	border-top: 1px solid black;
 }
 
-.players > div > div,
-.players > div > div > div,
-.players > div > div > div > div {
+.players > div div {
 	display: inline-block;
+}
+
+.players > div > div {
+	margin-right: 8px;
+}
+
+.players div.inputs > div {
+	border: 1px solid #333;
 }
 
 div.d10 {
@@ -51,15 +61,38 @@ div.d10 div {
 	transform-origin: bottom left;
 }
 
+.players div.d10 div {
+	font-size: 30px;
+	line-height: 35px;
+}
+
 #myself div.inputs div.prompt {
 	width: 70%;
+}
+
+.players div.inputs div.prompt {
+	display: block;
 }
 
 div.input {
 	position: relative;
 }
 
+.players div.prompt,
+.players div.input {
+	text-align: center;
+	min-width: 50px;
+}
+
+.players div.input > div {
+	padding: 0 4px;
+}
+
 div.input div.secret {
+	display: none;
+}
+
+.secret div.input div.secret {
 	border: 1px solid red;
 	width: 80px;
 	text-align: center;
@@ -70,19 +103,15 @@ div.input div.secret {
 	top: 5px;
 	font-size: 17px;
 	background-color: white;
-	display: none;
-}
-
-.secret div.input div.secret {
 	display: block;
 }
 
-div.input > div {
+#myself div.input > div {
 	padding:5px;
 	text-align: center;
 	font-size: 25px;
 }
-div.input > div.value {
+#myself div.input > div.value {
 	min-width: 40px;
 }
 
@@ -113,8 +142,17 @@ div.face {
 	width: 55px;
 }
 
+.players div.face {
+	height: 45px;
+	width: 45px;
+}
+
 div.display > div.d10 {
 	margin: 5px;
+}
+
+.players div.display > div.d10 {
+	margin: 2px;
 }
 
 div.inputs > div > div,
@@ -149,28 +187,28 @@ div.connections input {
 	min-height: 180px;
 }
 
-.landscape div.inputs {
+.landscape #myself div.inputs {
 	width: 30vw;
 }
 
-.landscape div.display {
+.landscape #myself div.display {
 	width: 70vw;
 }
 
-div.outputs {
+#myself div.outputs {
 	min-height: 100px;
 }
 
-div.outputs > div {
+#myself div.outputs > div {
 	width: 100%;
 	text-align: center;
 }
 
-div.outputs span {
+#myself div.outputs span {
 	font-size: 50px;
 }
 
-div.outputs .smaller span {
+#myself div.outputs .smaller span {
 	font-size: 20px;
 }
 

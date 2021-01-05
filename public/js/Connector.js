@@ -2,8 +2,13 @@ import { ViewModel } from "./ViewModel.js";
 import { ConnectorView } from "./ConnectorView.js";
 import { Player } from "./Player.js";
 
+function valuesDiffer(o1, o2) {
+	return Object.keys(o1).find(k => o1[k] != o2[k]);
+}
+
 export class Connector {
 	constructor(socket, player) {
+		this.players = {};
 		this.socket = socket;
 		this.ivm = player.ivm;
 		this.tvm = new ViewModel(["join", "leave", "state"]);
@@ -15,9 +20,17 @@ export class Connector {
 		this.tvm.bind("leave", null, this.leave.bind(this));
 		socket.on("update vm", (data) => {
 			console.log("Connector: received vm update", data);
+			if (data.id == this.socket.id) {
+				this.updateIvm(player, data.vm);
+			} else {
+				if (this.players[data.id]) {
+					this.players[data.id].remoteModel = Object.assign({}, data.vm);
+					this.updateIvm(this.players[data.id].player, data.vm);
+				}
+			}
 		});
-		this.players = {};
 		socket.on("members", data => {
+			player.id = this.socket.id;
 			console.log("Connector: members", this.socket.id, data);
 			Object.keys(this.players).forEach(id => {
 				this.players[id].doomed = true;
@@ -26,7 +39,12 @@ export class Connector {
 				if (member.id == this.socket.id) {
 					this.tvm.state = "joined";
 				} else if (!this.players[member.id]) {
-					this.players[member.id] = new Player(member.id, false, member.vm);
+					let newp = new Player(member.id, false, member.vm);
+					this.players[member.id] = {
+						player: newp,
+						remoteModel: Object.assign({}, member.vm)
+					}
+					this.watchChanges(newp);
 				} else {
 					this.players[member.id].doomed = false;
 				}
@@ -36,44 +54,52 @@ export class Connector {
 			}
 			Object.keys(this.players).forEach(id => {
 				if (this.tvm.state == "left" || this.players[id].doomed) {
-					this.players[id].destruct();
+					this.players[id].player.destruct();
 					delete this.players[id];
 				}
 			});
 		});
-		socket.on("left", (data) => {
-			console.log("Connector: left", this.socket.id, data);
-			if (data.id == this.socket.id) {
-				this.tvm.state = "left";
-			} else {
-				if (this.players[data.id]) {
-					this.players[data.id].destruct();
-					delete this.players[data.id];
-				}
-			}
+		socket.on("connect", data => {
+			console.log("on connected", socket.id);
 		});
-		this.ivm.onChange( (data) => {
-			this.ivmChanged(this.socket.id, data);
+		this.watchChanges(player);
+	}
+	watchChanges(player) {
+		player.ivm.onChange(data => {
+			this.ivmChanged(player, data);
 		});
 	}
-	ivmChanged(id, data) {
-		console.log("Connector: Input ViewModel Change", id, data);
-		if (this.players[id] && this.players[id].__updating) {
-			return;
-		}
+	ivmChanged(player, data) {
+		console.log("Connector: Input ViewModel Change", player.id, data);
 		if (this.tvm.state != "joined") {
 			console.log("no connection, don't broadcast");
 			return;
 		}
 		clearTimeout(this.utimeout);
 		this.utimeout = setTimeout(() => {
-			console.log("Connector: Sending IVM update");
-			socket.emit("update vm", {
-				from: this.socket.id,
-				id: id,
-				vm: data.vm._vmObject
-			});
+			var r = this.players[player.id] && this.players[player.id].remoteModel;
+			var d = true;
+			if (r) {
+				d = valuesDiffer(r, data.vm._vmObject);
+			}
+			console.log("Connector: Need IVM update?", this.socket.id, player.id, r, d);
+			if (d) {
+				this.socket.emit("update vm", {
+					from: this.socket.id,
+					id: player.id,
+					vm: data.vm._vmObject
+				});
+			}
 		}, 2);
+	}
+	updateIvm(player, vm) {
+		player.__updating = true;
+		console.log("Starting update IVM", player.id, JSON.stringify(player.ivm._vmObject), JSON.stringify(vm));
+		Object.keys(vm).forEach(k => {
+			player.ivm[k] = vm[k];
+		});
+		console.log("Done update IVM");
+		//player.__updating = false;
 	}
 	join(element, value) {
 		if (value) {

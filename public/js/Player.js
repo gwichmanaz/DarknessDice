@@ -63,7 +63,7 @@ export class Player {
 	}
 	updatePool(pool, color, size) {
 		while(pool.length < size) {
-			pool.push(new d10(color, this.rng, null, this.view.displayElement));
+			pool.push(new d10(color, null, null, this.view.displayElement));
 		}
 		while(pool.length > size) {
 			pool.pop().destruct();
@@ -76,6 +76,7 @@ export class Player {
 		this.updatePool(this.bestialPool, "bestial", beastSize);
 	}
 	roll(el, value) {
+		console.log("ROLL", value);
 		if (this.ivm.locked) {
 			return;
 		}
@@ -92,7 +93,11 @@ export class Player {
 		if (value == 0) {
 			return;
 		}
+		if (this.ivm.roll == 0) {
+			return;
+		}
 
+		this.rng.reset(value);
 		this.ovm.success = false;
 		this.ovm.fail = false;
 		this.ovm.botch = false;
@@ -102,11 +107,19 @@ export class Player {
 
 		let threshold = this.ivm.difficulty;
 		this.updatePools();
+		this.normalPool.forEach(d => {
+			this.rng.mulberry();
+			d.reset(this.rng.seed);
+		});
+		this.bestialPool.forEach(d => {
+			this.rng.mulberry();
+			d.reset(this.rng.seed);
+		});
 		let rollPromises = [].concat(this.normalPool.map(d => d.roll(threshold)), this.bestialPool.map(d => d.roll(threshold)));
 		Promise.all(rollPromises).then(() => {
+			console.log("ROLL PROMISES COMPLETE");
 			this.analyze();
 			this.ovm.rolling = false;
-			this.ivm.seed = 0;
 			this.ivm.roll = 0;
 			this.ivm.persist();
 		});

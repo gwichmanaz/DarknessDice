@@ -29,7 +29,6 @@ export class RNG {
 		}
 		return r;
 	}
-	// Gives the user some agency, sort of... the moment you hit reset matters.
 	reset(seed) {
 		seed = seed || saltSeed();
 		this.seed = Math.floor(Math.abs(seed)) % 2147483647;

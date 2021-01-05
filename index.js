@@ -41,8 +41,10 @@ io.on("connection", (socket) => {
 	});
 	socket.on("update vm", (data) => {
 		console.log(`Update VM for ${data.id} by ${data.from}`, data);
-		users[data.id].vm = data.vm;
-		io.to(data.gamename).emit("update vm", data);
+		if (data.id && users[data.id]) {
+			users[data.id].vm = data.vm;
+			socket.to(data.vm.gamename).emit("update vm", data);
+		}
 	});
 	socket.on("leave game", (data) => {
 		leave();
