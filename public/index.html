@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no">
 		<title>World of Darkness Dice Roller</title>
 		<link rel="stylesheet" type="text/css" href="css/wodice.css" inline/>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 		<script type="module">
 			import { WoDiceRoller } from "./js/index.js";
 			function onResize() {
@@ -68,32 +69,74 @@
 		</style>
 	</head>
 	<body>
-		<div class="inputs">
-			<div id="difficulty">
-				<div class="prompt">difficulty</div>
-				<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
-			</div><div id="dicePool">
-				<div class="prompt">dice pool</div>
-				<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
-			</div><div id="bestialPool">
-				<div class="prompt">bestial dice</div>
-				<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
-			</div><div id="roll">roll</div>
-		</div><div class="display">
-		</div><div class="outputs">
-			<div class="smaller">
-				<span class="fail"><span class="successCount">0</span> successes</span>
+		<div id="others">
+			<div class="username"></div>
+			<div class="inputs">
+				<div class="difficulty">
+					<div class="prompt">diff'y</div>
+					<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div><div class="secret">SECRET</div></div>
+				</div><div class="dicePool">
+					<div class="prompt">pool</div>
+					<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
+				</div><div class="bestialPool">
+					<div class="prompt">beast</div>
+					<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
+				</div>
+			</div><div class="display">
+			</div><div class="outputs">
+				<div class="smaller">
+					<span class="fail"><span class="successCount">0</span> successes</span>
+				</div>
+				<div class="result">
+					<span class="success"><span class="successCount">0</span> successes</span>
+					<span class="fail">fail</span>
+					<span class="rolling">(rolling)</span>
+					<span class="botch">botch</span>
+					<span class="bestialFailure">bestial failure</span>
+				</div>
+				<div class="extra">
+					<span class="messyCritical">Messy Critical</span>
+				</div>
 			</div>
-			<div class="result">
-				<span class="success"><span class="successCount">0</span> successes</span>
-				<span class="fail">fail</span>
-				<span class="rolling">(rolling)</span>
-				<span class="botch">botch</span>
-				<span class="bestialFailure">bestial failure</span>
+		</div>
+		<div id="myself">
+			<div class="inputs">
+				<div class="difficulty">
+					<div class="prompt">difficulty</div>
+					<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div><div class="secret">SECRET</div></div>
+				</div><div class="dicePool">
+					<div class="prompt">dice pool</div>
+					<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
+				</div><div class="bestialPool">
+					<div class="prompt">bestial dice</div>
+					<div class="input"><div class="minus">-</div><div class="value"></div><div class="plus">+</div></div>
+				</div><div class="roll">roll</div>
+			</div><div class="display">
+			</div><div class="outputs">
+				<div class="smaller">
+					<span class="fail"><span class="successCount">0</span> successes</span>
+				</div>
+				<div class="result">
+					<span class="success"><span class="successCount">0</span> successes</span>
+					<span class="fail">fail</span>
+					<span class="rolling">(rolling)</span>
+					<span class="botch">botch</span>
+					<span class="bestialFailure">bestial failure</span>
+				</div>
+				<div class="extra">
+					<span class="messyCritical">Messy Critical</span>
+				</div>
 			</div>
-			<div class="extra">
-				<span class="messyCritical">Messy Critical</span>
+		</div><div class="connections left">
+			<div>
+			<div id="gamename"><div class="prompt">Game Name</div><input type="text"/></div>
+			<div id="username"><div class="prompt">Player Name</div><input type="text"/></div>
+			<div id="join">join</div>
+			<div id="joining">joining</div>
+			<div id="leaving">leaving</div>
+			<div id="leave">leave</div>
 			</div>
+		</div><div class="players">
 		</div>
 	</body>
 </html>

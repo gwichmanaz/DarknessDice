@@ -3,9 +3,11 @@ import { ViewModel } from "./ViewModel.js";
 var prefix = "pvm-";
 
 function loadPersist(pvm, initial) {
-	var pvs = localStorage.getItem(prefix + pvm.__name);
-	if (pvs) {
-		initial = JSON.parse(pvs);
+	if (pvm.__name) {
+		let pvs = localStorage.getItem(prefix + pvm.__name);
+		if (pvs) {
+			initial = JSON.parse(pvs);
+		}
 	}
 	Object.keys(initial).forEach(key => {
 		if (pvm.hasOwnProperty(key)) {
@@ -15,6 +17,9 @@ function loadPersist(pvm, initial) {
 }
 
 function savePersist(pvm) {
+	if (!pvm.__name) {
+		return;
+	}
 	var pvs = JSON.stringify(pvm._vmObject);
 	localStorage.setItem(prefix + pvm.__name, pvs);
 }

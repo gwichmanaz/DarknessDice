@@ -7,9 +7,7 @@ var saltSeed = () => {
 
 export class RNG {
 	constructor(seed) {
-		seed = seed || saltSeed();
-		this.seed = Math.floor(Math.abs(seed)) % 2147483647;
-		this.uses = 0;
+		this.reset(seed);
 	}
 	mulberry() {
 		this.uses++;
@@ -30,5 +28,11 @@ export class RNG {
 			r[a]++;
 		}
 		return r;
+	}
+	reset(seed) {
+		seed = seed || saltSeed();
+		this.seed = Math.floor(Math.abs(seed)) % 2147483647;
+		this.uses = 0;
+		return this.seed;
 	}
 }
