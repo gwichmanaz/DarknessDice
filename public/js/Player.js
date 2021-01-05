@@ -13,14 +13,15 @@ const defaultIvm = {
 	"roll": 0,
 	"seed": 0,
 	"locked": false,
-	"secret": false
+	"secret": false,
+	"hidden": false
 };
 
 export class Player {
 	constructor (id, isMyself, ivm = defaultIvm) {
 		this.id = id;
 		this.rng = new RNG();
-		var iname = isMyself ? "wodice" : null;
+		var iname = isMyself ? "wodice2" : null;
 		this.ivm = new PersistentViewModel(iname, ivm);
 		this.ovm = new ViewModel([
 			"rolling",
@@ -36,6 +37,8 @@ export class Player {
 		this.bestialPool = [];
 		["difficulty", "dicePool", "bestialPool"].forEach(key => this.ivm.bind(key, null, this.constrain.bind(this)));
 		if (isMyself) {
+			this.ivm.locked = false;
+			this.ivm.secret = false;
 			this.ivm.bind("roll", null, this.roll.bind(this));
 		}
 		this.ivm.bind("seed", null, this.doRoll.bind(this));
@@ -50,8 +53,8 @@ export class Player {
 		if (this.ivm.difficulty < 2) {
 			this.ivm.difficulty = 2;
 		}
-		if (this.ivm.difficulty > 10) {
-			this.ivm.difficulty = 10;
+		if (this.ivm.difficulty > 9) {
+			this.ivm.difficulty = 9;
 		}
 		if (this.ivm.bestialPool < 0) {
 			this.ivm.bestialPool = 0;
@@ -77,10 +80,11 @@ export class Player {
 	}
 	roll(el, value) {
 		console.log("ROLL", value);
-		if (this.ivm.locked) {
+		if (value == 0 || this.ovm.rolling) {
 			return;
 		}
-		if (value == 0 || this.ovm.rolling) {
+		if (this.ivm.locked) {
+			this.ivm.roll = 0;
 			return;
 		}
 
@@ -89,11 +93,9 @@ export class Player {
 		this.ivm.seed = this.rng.reset();
 	}
 	doRoll(el, value) {
-		console.log("DO ROLL", value);
+		console.log("DO ROLL", value, this.ivm.roll);
+		var fast = this.ivm.roll == 0;
 		if (value == 0) {
-			return;
-		}
-		if (this.ivm.roll == 0) {
 			return;
 		}
 
@@ -115,12 +117,13 @@ export class Player {
 			this.rng.mulberry();
 			d.reset(this.rng.seed);
 		});
-		let rollPromises = [].concat(this.normalPool.map(d => d.roll(threshold)), this.bestialPool.map(d => d.roll(threshold)));
+		let rollPromises = [].concat(this.normalPool.map(d => d.roll(threshold, fast)), this.bestialPool.map(d => d.roll(threshold, fast)));
 		Promise.all(rollPromises).then(() => {
 			console.log("ROLL PROMISES COMPLETE");
 			this.analyze();
 			this.ovm.rolling = false;
 			this.ivm.roll = 0;
+			this.autoLock();
 			this.ivm.persist();
 		});
 	}
@@ -174,5 +177,22 @@ export class Player {
 	}
 	destruct() {
 		this.view.destruct();
+	}
+	autoLock() {
+		let isDM = this.ivm.username.match(/^dm(\s.*)?$/i);
+		if (this.state == "joined" && !isDM) {
+			this.ivm.locked = true;
+		}
+	}
+	setState(state) {
+		if (state != this.state) {
+			this.state = state;
+			if (state == "joined") {
+				this.autoLock();
+			}
+			if (state == "left") {
+				this.ivm.locked = false;
+			}
+		}
 	}
 }

@@ -18,6 +18,7 @@ export class Connector {
 		this.view = new ConnectorView(this.socket, this.ivm, this.tvm);
 		this.tvm.bind("join", null, this.join.bind(this));
 		this.tvm.bind("leave", null, this.leave.bind(this));
+		this.tvm.bind("state", null, (e, v) => player.setState(v));
 		socket.on("update vm", (data) => {
 			console.log("Connector: received vm update", data);
 			if (data.id == this.socket.id) {

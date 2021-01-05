@@ -24,29 +24,29 @@ body {
 	display: none;
 }
 
-.players,
+#players,
 #myself > div {
 	border: 2px solid black;
 	padding: 5px;
 }
 
-.players * {
+#players * {
 	font-size: 14px;
 }
 
-.players > div {
+#players > div {
 	border-top: 1px solid black;
 }
 
-.players > div div {
+#players > div div {
 	display: inline-block;
 }
 
-.players > div > div {
+#players > div > div {
 	margin-right: 8px;
 }
 
-.players div.inputs > div {
+#players div.inputs > div {
 	border: 1px solid #333;
 }
 
@@ -61,7 +61,7 @@ div.d10 div {
 	transform-origin: bottom left;
 }
 
-.players div.d10 div {
+#players div.d10 div {
 	font-size: 30px;
 	line-height: 35px;
 }
@@ -70,37 +70,64 @@ div.d10 div {
 	width: 70%;
 }
 
-.players div.inputs div.prompt {
+#players div.user div.username,
+#players div.inputs div.prompt,
+#players div.outputs div.result {
 	display: block;
+}
+
+#players div.outputs > div {
+	text-align: center;
+	padding: 0 0.5em;
+}
+
+#players div.input .plus,
+#players div.input .minus,
+#players div.user .toggle {
+	display: none;
+}
+
+#players.dm div.input .plus,
+#players.dm div.input .minus,
+#players.dm div.user .toggle {
+	display: inline-block;
+}
+
+#players.dm > div.dm div.user .toggle {
+	display: none;
+}
+
+#players.not-dm > div.hidden > div.display {
+	display: none;
 }
 
 div.input {
 	position: relative;
 }
 
-.players div.prompt,
-.players div.input {
+#players div.prompt,
+#players div.input {
 	text-align: center;
 	min-width: 50px;
 }
 
-.players div.input > div {
+#players div.input > div {
 	padding: 0 4px;
 }
 
+#players div.input div.secret,
 div.input div.secret {
 	display: none;
 }
 
-.secret div.input div.secret {
+.not-dm.secret div.input div.secret {
 	border: 1px solid red;
-	width: 80px;
 	text-align: center;
 	color: red;
-	transform: rotate(-10deg);
+	transform: rotate(-5deg);
 	position: absolute;
 	left: 0;
-	top: 5px;
+	top: 2px;
 	font-size: 17px;
 	background-color: white;
 	display: block;
@@ -134,6 +161,38 @@ div.input > div.plus,
 	border-radius: 10px;
 }
 
+#myself.not-dm.locked div.roll {
+	border: 1px solid black;
+	color: #888;
+	background-color: #EEE;
+	cursor: not-allowed;
+}
+
+div.toggle {
+	cursor: pointer;
+	border: 1px solid black;
+	border-radius: 10px;
+	color: #888;
+	text-align: center;
+	font-size: 0.8em;
+	padding: 0 0.4em;
+}
+
+div.toggle > span {
+	font-size: 1em;
+}
+
+span.check {
+	padding-right: 0.25em;
+	color: transparent;
+}
+
+.hidden div.toggle#hidden span,
+.locked div.toggle.locked span,
+.secret div.toggle.secret span {
+	color: green;
+}
+
 div.face {
 	text-align: center;
 	border: 5px solid black;
@@ -142,7 +201,7 @@ div.face {
 	width: 55px;
 }
 
-.players div.face {
+#players div.face {
 	height: 45px;
 	width: 45px;
 }
@@ -151,7 +210,7 @@ div.display > div.d10 {
 	margin: 5px;
 }
 
-.players div.display > div.d10 {
+#players div.display > div.d10 {
 	margin: 2px;
 }
 
@@ -176,7 +235,7 @@ div.connections div.prompt {
 }
 
 div.connections input {
-	width: 100px;
+	width: 140px;
 }
 
 #myself div.inputs,
@@ -210,6 +269,18 @@ div.connections input {
 
 #myself div.outputs .smaller span {
 	font-size: 20px;
+}
+
+#players div.outputs .smaller {
+	display: none;
+}
+
+#players div.outputs.fail > div.smaller {
+	display: block;
+}
+
+#players div.outputs.fail > div.extra {
+	display: none;
 }
 
 div.outputs > div > span {

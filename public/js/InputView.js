@@ -1,16 +1,17 @@
 export class InputView {
 	constructor(vm, parentElement = document) {
 		this.element = parentElement.querySelector(".inputs");
-		this.difficultyEl = this.element.querySelector(".difficulty");
-		this.dicePoolEl = this.element.querySelector(".dicePool");
-		this.bestialPoolEl = this.element.querySelector(".bestialPool");
 		["difficulty", "dicePool", "bestialPool"].forEach(key => this.bindNumericKey(vm, key));
 		this.rollEl = this.element.querySelector(".roll");
 		if (this.rollEl) {
-			this.rollEl.addEventListener('click', () => vm.roll++);
+			this.rollEl.addEventListener('click', () => {
+				if (!vm.locked) {
+					vm.roll++;
+				}
+			});
 		}
 		["locked", "secret"].forEach(k => {
-			vm.bind(k, this.element, (e, v) => e.classList.toggle(k, v));
+			vm.bind(k, parentElement, (e, v) => e.classList.toggle(k, v));
 		});
 	}
 	bindNumericKey(vm, key) {

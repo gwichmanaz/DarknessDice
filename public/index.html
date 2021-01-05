@@ -70,7 +70,11 @@
 	</head>
 	<body>
 		<div id="others">
-			<div class="username"></div>
+			<div class="user">
+				<div class="username"></div>
+				<div class="locked toggle"><span class="check">✓</span><span>locked</span></div>
+				<div class="secret toggle"><span class="check">✓</span><span>secret</span></div>
+			</div>
 			<div class="inputs">
 				<div class="difficulty">
 					<div class="prompt">diff'y</div>
@@ -127,16 +131,18 @@
 					<span class="messyCritical">Messy Critical</span>
 				</div>
 			</div>
-		</div><div class="connections left">
-			<div>
-			<div id="gamename"><div class="prompt">Game Name</div><input type="text"/></div>
-			<div id="username"><div class="prompt">Player Name</div><input type="text"/></div>
-			<div id="join">join</div>
-			<div id="joining">joining</div>
-			<div id="leaving">leaving</div>
-			<div id="leave">leave</div>
+			<div class="connections left">
+				<div>
+					<div id="gamename"><div class="prompt">Game Name</div><input type="text"/></div>
+					<div id="username"><div class="prompt">Player Name</div><input type="text"/></div>
+					<div id="hidden" class="toggle"><span class="check">✓</span><span>hidden</span></div>
+					<div id="join">join</div>
+					<div id="joining">joining</div>
+					<div id="leaving">leaving</div>
+					<div id="leave">leave</div>
+				</div>
 			</div>
-		</div><div class="players">
 		</div>
+		<div id="players"></div>
 	</body>
 </html>
