@@ -1,6 +1,6 @@
 export class d10View {
-	constructor(vm, parentView) {
-		this.parentElement = parentView ? parentView.element : document.querySelector(".display");
+	constructor(vm, parentElement) {
+		this.parentElement = parentElement;
 		this.element = document.createElement('div');
 		this.faceElement = document.createElement('div');
 		this.element.classList.add('d10');

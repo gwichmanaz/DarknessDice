@@ -9,11 +9,11 @@ const MIN_PIPS = 1, MAX_PIPS = 10;
 const SPAWN_PIPS = MAX_PIPS;
 
 export class d10 {
-	constructor(color, rng = null, parent = null) {
+	constructor(color, rng = null, parent = null, topElement = null) {
 		this.rng = rng || new RNG();
 		this.generation = parent ? parent.generation + 1 : 0;
 		this.vm = new ViewModel(["color", "spinning", "face", "success", "fail", "critical"]);
-		this.view = new d10View(this.vm, parent && parent.view);
+		this.view = new d10View(this.vm, parent ? parent.view.element : topElement);
 		this.spawns = [];
 		this.vm.color = color;
 		this.vm.spinning = false;

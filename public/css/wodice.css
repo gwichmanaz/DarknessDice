@@ -7,13 +7,37 @@
 	user-select: none;
 }
 
+input {
+	text-transform: none;
+	font-weight: normal;
+}
+
+input:read-only {
+	background-color: #CCC;
+}
+
 body {
 	margin: 0;
 }
 
-body > div {
+#others {
+	display: none;
+}
+
+.players,
+#myself > div {
 	border: 2px solid black;
 	padding: 5px;
+}
+
+.players > div {
+	border-top: 1px solid black;
+}
+
+.players > div > div,
+.players > div > div > div,
+.players > div > div > div > div {
+	display: inline-block;
 }
 
 div.d10 {
@@ -27,7 +51,7 @@ div.d10 div {
 	transform-origin: bottom left;
 }
 
-div.inputs div.prompt {
+#myself div.inputs div.prompt {
 	width: 70%;
 }
 
@@ -64,15 +88,16 @@ div.input > div.value {
 
 div.input > div.minus,
 div.input > div.plus,
-#roll,
-#connect,
-#disconnect
+.roll,
+#join,
+#leave
 {
 	cursor: pointer;
 }
 
-#connect,
-#roll {
+#join,
+#leave,
+.roll {
 	background-color: green;
 	color: white;
 	text-align: center;
@@ -116,9 +141,9 @@ div.connections input {
 	width: 100px;
 }
 
-div.inputs,
-div.display,
-div.outputs {
+#myself div.inputs,
+#myself div.display,
+#myself div.outputs {
 	float: left;
 	width: 100vw;
 	min-height: 180px;
@@ -168,16 +193,24 @@ div.outputs.botch > div.result > span.fail {
 	display: none;
 }
 
-#connect,
-#connecting,
-#disconnect {
+#join,
+#joining,
+#leaving,
+#leave {
 	display: none;
 	margin-left: 2em;
 	padding: 0 1em;
 }
 
-.disconnected #connect,
-.connecting #connecting,
-.connected #disconnect {
+#joining,
+#leaving {
+	font-style: italic;
+	color: #88F;
+}
+
+.left #join,
+.joining #joining,
+.leaving #leaving,
+.joined #leave {
 	display: inline-block;
 }

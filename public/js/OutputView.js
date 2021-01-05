@@ -1,6 +1,6 @@
 export class OutputView {
-	constructor(vm) {
-		this.element = document.querySelector(".outputs");
+	constructor(vm, parentElement = document) {
+		this.element = parentElement.querySelector(".outputs");
 		for (let el of this.element.querySelectorAll(".successCount")) {
 			vm.bind("successCount", el);
 		}
