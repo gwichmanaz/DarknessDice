@@ -55,4 +55,5 @@ io.on("connection", (socket) => {
 	});
 });
 
-http.listen(80, function () {});
+const PORT = process.env.PORT || 80;
+http.listen(PORT, function () {});
