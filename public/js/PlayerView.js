@@ -30,7 +30,7 @@ export class PlayerView {
 		this.ivm.bind("hidden", this.element, (e, v) => e.classList.toggle("hidden", v));
 	}
 	onUserName(element, value) {
-		let isDM = value.match(/^dm(\s.*)?$/i);
+		let isDM = value.match(/^st(\s.*)?$/i);
 		element.classList.toggle("dm", isDM);
 		element.classList.toggle("not-dm", !isDM);
 		if (this.isMyself) {

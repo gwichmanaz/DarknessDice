@@ -179,7 +179,7 @@ export class Player {
 		this.view.destruct();
 	}
 	autoLock() {
-		let isDM = this.ivm.username.match(/^dm(\s.*)?$/i);
+		let isDM = this.ivm.username.match(/^st(\s.*)?$/i);
 		if (this.state == "joined" && !isDM) {
 			this.ivm.locked = true;
 		}

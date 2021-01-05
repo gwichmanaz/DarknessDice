@@ -302,6 +302,10 @@ div.outputs.botch > div.result > span.fail {
 	display: none;
 }
 
+#hidden {
+	margin-left: 2em;
+}
+
 #join,
 #joining,
 #leaving,
