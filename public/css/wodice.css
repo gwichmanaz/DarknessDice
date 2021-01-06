@@ -263,6 +263,16 @@ div.connections input {
 	text-align: center;
 }
 
+#players.not-dm > div.secret .outputs > div,
+#myself.not-dm.secret .outputs > div {
+	visibility: hidden;
+}
+
+#players.not-dm > div.secret .display div.d10.success > .face,
+#myself.not-dm.secret .display div.d10.success > .face {
+	border-color: #000000;
+}
+
 #myself div.outputs span {
 	font-size: 50px;
 }
