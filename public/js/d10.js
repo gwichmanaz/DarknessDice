@@ -1,10 +1,8 @@
 import { ViewModel } from "./ViewModel.js";
 import { d10View } from "./d10View.js";
-import { Utils } from "./Utils.js";
 import { RNG } from "./RNG.js";
 
 const MIN_SPINS = 20, MAX_SPINS = 50;
-const MIN_SPIN_MS = 500, MAX_SPIN_MS = 1500;
 const SPINTERVAL_MS = 30;
 const MIN_PIPS = 1, MAX_PIPS = 10;
 const SPAWN_PIPS = MAX_PIPS;

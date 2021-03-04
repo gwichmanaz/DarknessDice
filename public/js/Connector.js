@@ -63,6 +63,10 @@ export class Connector {
 		socket.on("connect", data => {
 			console.log("on connected", socket.id);
 		});
+		socket.on("disconnect", reason => {
+			window.alert(`Socket Disconnected! ${reason}`);
+			socket.connect();
+		})
 		this.watchChanges(player);
 	}
 	watchChanges(player) {
